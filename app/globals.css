@@ -5,6 +5,29 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Media kit theme: Minimal (default) */
+  --theme-bg: #FFFFFF;
+  --theme-text: #1C1917;
+  --theme-accent: #B08BA8;
+  --theme-accent-light: #F2EBF0;
+  --theme-muted: #78716C;
+}
+
+[data-theme="bold"] {
+  --theme-bg: #1C1410;
+  --theme-text: #FAF7F4;
+  --theme-accent: #B08BA8;
+  --theme-accent-light: #2C2420;
+  --theme-muted: #D4B8CE;
+}
+
+[data-theme="elegant"] {
+  --theme-bg: #FAF7F4;
+  --theme-text: #2C2420;
+  --theme-accent: #B08BA8;
+  --theme-accent-light: #F2EBF0;
+  --theme-muted: #8C7A70;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,7 +40,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 @layer utilities {
