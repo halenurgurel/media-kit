@@ -4,7 +4,7 @@ import { useEditorStore } from "@/store/useEditorStore";
 import { Label } from "@/components/ui/Label";
 import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
-import { fontFamilyLabels, layoutDefaultColors, layoutLabels } from "@/lib/theme";
+import { colorPalettes, fontFamilyLabels, layoutDefaultColors, layoutLabels } from "@/lib/theme";
 import type { MediaKitFontFamily, MediaKitLayout } from "@/types/mediakit";
 
 const FONT_FAMILIES: MediaKitFontFamily[] = ["inter", "playfair", "poppins", "dm-sans"];
@@ -27,28 +27,90 @@ export function ThemeSection() {
     updateField("theme.backgroundColor", preset.backgroundColor);
   }
 
+  function applyPalette(palette: { primaryColor: string; backgroundColor: string }) {
+    updateField("theme.primaryColor", palette.primaryColor);
+    updateField("theme.backgroundColor", palette.backgroundColor);
+  }
+
+  function resetColors() {
+    applyPalette(layoutDefaultColors[draft.theme.layout]);
+  }
+
+  const defaultColors = layoutDefaultColors[draft.theme.layout];
+  const isUsingDefaultColors =
+    draft.theme.primaryColor === defaultColors.primaryColor &&
+    draft.theme.backgroundColor === defaultColors.backgroundColor;
+
   return (
     <div className="flex max-w-md flex-col gap-6">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <Label htmlFor="primaryColor">Primary color</Label>
-          <input
-            id="primaryColor"
-            type="color"
-            value={draft.theme.primaryColor}
-            onChange={(e) => updateField("theme.primaryColor", e.target.value)}
-            className="h-10 w-full cursor-pointer rounded-md border border-cream-200"
-          />
+      <div>
+        <div className="mb-3 flex items-center justify-between">
+          <Label className="mb-0">Colors</Label>
+          <button
+            type="button"
+            onClick={resetColors}
+            disabled={isUsingDefaultColors}
+            className="text-xs font-medium text-mauve-800 hover:underline disabled:cursor-not-allowed disabled:text-charcoal-400 disabled:no-underline"
+          >
+            Reset to default
+          </button>
         </div>
-        <div>
-          <Label htmlFor="backgroundColor">Background color</Label>
-          <input
-            id="backgroundColor"
-            type="color"
-            value={draft.theme.backgroundColor}
-            onChange={(e) => updateField("theme.backgroundColor", e.target.value)}
-            className="h-10 w-full cursor-pointer rounded-md border border-cream-200"
-          />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <Label htmlFor="primaryColor">Primary color</Label>
+            <input
+              id="primaryColor"
+              type="color"
+              value={draft.theme.primaryColor}
+              onChange={(e) => updateField("theme.primaryColor", e.target.value)}
+              className="h-10 w-full cursor-pointer rounded-md border border-cream-200"
+            />
+          </div>
+          <div>
+            <Label htmlFor="backgroundColor">Background color</Label>
+            <input
+              id="backgroundColor"
+              type="color"
+              value={draft.theme.backgroundColor}
+              onChange={(e) => updateField("theme.backgroundColor", e.target.value)}
+              className="h-10 w-full cursor-pointer rounded-md border border-cream-200"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <Label>Suggested palettes</Label>
+        <div className="grid grid-cols-4 gap-3">
+          {colorPalettes.map((palette) => {
+            const isActive =
+              draft.theme.primaryColor === palette.primaryColor &&
+              draft.theme.backgroundColor === palette.backgroundColor;
+            return (
+              <button
+                key={palette.name}
+                type="button"
+                onClick={() => applyPalette(palette)}
+                title={palette.name}
+                className={cn(
+                  "flex flex-col items-center gap-1.5 rounded-md border p-2 transition-colors",
+                  isActive
+                    ? "border-mauve-400 ring-1 ring-mauve-400"
+                    : "border-cream-200 hover:border-mauve-200"
+                )}
+              >
+                <span
+                  className="h-8 w-8 overflow-hidden rounded-full border border-cream-200"
+                  style={{
+                    background: `linear-gradient(135deg, ${palette.primaryColor} 50%, ${palette.backgroundColor} 50%)`,
+                  }}
+                />
+                <span className="truncate text-[11px] font-medium text-charcoal-600">
+                  {palette.name}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

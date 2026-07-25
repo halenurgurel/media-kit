@@ -29,3 +29,21 @@ export const layoutDefaultColors: Record<MediaKitLayout, { primaryColor: string;
   bold: { primaryColor: "#D14D6C", backgroundColor: "#1C1410" },
   elegant: { primaryColor: "#B08BA8", backgroundColor: "#FAF7F4" },
 };
+
+export interface ColorPalette {
+  name: string;
+  primaryColor: string;
+  backgroundColor: string;
+}
+
+// Curated one-click color pairings for users who don't want to pick colors by hand.
+export const colorPalettes: ColorPalette[] = [
+  { name: "Classic Mauve", primaryColor: "#B08BA8", backgroundColor: "#FFFFFF" },
+  { name: "Blush", primaryColor: "#E8A0A0", backgroundColor: "#FDF6F0" },
+  { name: "Charcoal Noir", primaryColor: "#D14D6C", backgroundColor: "#1C1410" },
+  { name: "Sage", primaryColor: "#7A9471", backgroundColor: "#F6F7F2" },
+  { name: "Ocean", primaryColor: "#3E7CB1", backgroundColor: "#F3F8FB" },
+  { name: "Sunset", primaryColor: "#E8873A", backgroundColor: "#FFF8F0" },
+  { name: "Golden", primaryColor: "#C9962C", backgroundColor: "#1A1A1A" },
+  { name: "Lavender", primaryColor: "#9B87C4", backgroundColor: "#FAF8FD" },
+];

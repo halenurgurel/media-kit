@@ -1,6 +1,7 @@
 import { Document, Page, View, Text, Image, Link, StyleSheet, Font } from "@react-pdf/renderer";
 import { averageEngagementRate } from "@/lib/mediakit";
 import { parseDemographicSegments } from "@/lib/demographics";
+import { getAccentLightColor } from "@/lib/color";
 import type { MediaKit, MediaKitFontFamily, MediaKitLayout } from "@/types/mediakit";
 
 // Google Fonts, served as static files via the @fontsource jsDelivr mirror —
@@ -75,10 +76,23 @@ const minimalColors: ThemeColors = {
   border: "#E7E5E4",
 };
 
-function getThemeColors(layout: MediaKitLayout): ThemeColors {
+function getLayoutBaseColors(layout: MediaKitLayout): ThemeColors {
   if (layout === "bold") return boldColors;
   if (layout === "minimal") return minimalColors;
   return elegantColors;
+}
+
+// Mirrors MediaKitPreview's CSS var overrides: background/accent/accentLight
+// follow the user's custom theme colors, while text/muted/border stay tied
+// to the layout preset (matching the live preview's behavior).
+function getThemeColors(theme: MediaKit["theme"]): ThemeColors {
+  const base = getLayoutBaseColors(theme.layout);
+  return {
+    ...base,
+    background: theme.backgroundColor,
+    accent: theme.primaryColor,
+    accentLight: getAccentLightColor(theme.primaryColor, theme.backgroundColor),
+  };
 }
 
 const currencySymbols: Record<string, string> = { USD: "$", EUR: "€", TRY: "₺" };
@@ -94,7 +108,7 @@ interface MediaKitPDFDocumentProps {
 }
 
 export function MediaKitPDFDocument({ mediaKit }: MediaKitPDFDocumentProps) {
-  const colors = getThemeColors(mediaKit.theme.layout);
+  const colors = getThemeColors(mediaKit.theme);
   const fontFamily = fontFamilyNames[mediaKit.theme.fontFamily];
   const engagementRate = averageEngagementRate(mediaKit.platforms);
 

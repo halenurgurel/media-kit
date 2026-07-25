@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import type { PublicMediaKit } from "@/types/mediakit";
 import { fontFamilyClassNames } from "@/lib/theme";
+import { getAccentLightColor } from "@/lib/color";
 import { cn } from "@/lib/utils";
 import { MediaKitHero } from "./MediaKitHero";
 import { AudienceStats } from "./AudienceStats";
@@ -17,6 +18,7 @@ export function MediaKitPreview({ draft }: MediaKitPreviewProps) {
   const themeOverrides = {
     "--theme-bg": draft.theme.backgroundColor,
     "--theme-accent": draft.theme.primaryColor,
+    "--theme-accent-light": getAccentLightColor(draft.theme.primaryColor, draft.theme.backgroundColor),
   } as CSSProperties;
 
   return (
