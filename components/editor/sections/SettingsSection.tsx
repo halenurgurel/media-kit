@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { useToastStore } from "@/store/useToastStore";
 import { sanitizeUsername, isUsernamePatternValid } from "@/lib/username";
 
-function UsernameField() {
+export function UsernameField() {
   const draft = useEditorStore((state) => state.draft);
   const user = useAuthStore((state) => state.user);
   const changeUsername = useChangeUsername();

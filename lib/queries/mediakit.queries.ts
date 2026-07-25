@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { MEDIA_KITS_COLLECTION, changeUsername } from "@/lib/firestore";
+import { MEDIA_KITS_COLLECTION, changeUsername, updateMediaKit } from "@/lib/firestore";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useToastStore } from "@/store/useToastStore";
 import type { MediaKit } from "@/types/mediakit";
@@ -54,6 +54,29 @@ export function useSaveMediaKit() {
     },
     onError: (error) => {
       showToast(error instanceof Error ? error.message : "Failed to save your media kit.", "error");
+    },
+  });
+}
+
+export function useUpdateDisplayName() {
+  const queryClient = useQueryClient();
+  const resetDraft = useEditorStore((state) => state.resetDraft);
+  const showToast = useToastStore((state) => state.showToast);
+
+  return useMutation({
+    mutationFn: async ({ id, displayName }: { id: string; displayName: string }) => {
+      await updateMediaKit(id, { displayName });
+      return displayName;
+    },
+    onSuccess: (displayName) => {
+      const latestDraft = useEditorStore.getState().draft;
+      const updatedDraft = { ...latestDraft, displayName };
+      resetDraft(updatedDraft);
+      queryClient.setQueryData<MediaKit | null>(mediaKitKeys.detail(updatedDraft.userId), () => updatedDraft);
+      showToast("Name updated.", "success");
+    },
+    onError: (error) => {
+      showToast(error instanceof Error ? error.message : "Failed to update name.", "error");
     },
   });
 }

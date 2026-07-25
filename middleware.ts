@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const SESSION_COOKIE = "__session";
-const PROTECTED_PREFIXES = ["/dashboard"];
-const AUTH_PAGES = ["/login", "/register"];
+const PROTECTED_PREFIXES = ["/dashboard", "/settings"];
+const AUTH_PAGES = ["/login", "/register", "/forgot-password"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -27,5 +27,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/settings/:path*", "/login", "/register", "/forgot-password"],
 };
