@@ -181,10 +181,19 @@ export function InstagramConnect() {
 
   if (!draft.instagram) {
     return (
-      <Button type="button" variant="secondary" onClick={handleConnect} className="inline-flex items-center gap-2">
-        <InstagramIcon className="h-4 w-4" />
-        Connect Instagram
-      </Button>
+      <div className="flex flex-col gap-1.5">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleConnect}
+          disabled
+          className="inline-flex items-center gap-2"
+        >
+          <InstagramIcon className="h-4 w-4" />
+          Connect Instagram
+        </Button>
+        <p className="text-xs text-charcoal-600">Instagram connection isn&apos;t available yet.</p>
+      </div>
     );
   }
 
