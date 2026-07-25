@@ -12,15 +12,13 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
+import { USERNAME_PATTERN, sanitizeUsername } from "@/lib/username";
 
 interface RegisterFormValues {
   email: string;
   password: string;
   username: string;
 }
-
-// Instagram usernames: letters, numbers, periods, and underscores only.
-const USERNAME_PATTERN = /^[a-z0-9._]+$/;
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -39,8 +37,10 @@ export default function RegisterPage() {
   });
 
   const username = watch("username");
-  const hasInvalidChars = username.length > 0 && !USERNAME_PATTERN.test(username);
-  const isPatternValid = !hasInvalidChars && username.length >= 3 && username.length <= 30;
+  const hasInvalidChars =
+    username.length > 0 && !USERNAME_PATTERN.test(username);
+  const isPatternValid =
+    !hasInvalidChars && username.length >= 3 && username.length <= 30;
 
   const debouncedUsername = useDebouncedValue(username, 500);
   const {
@@ -50,16 +50,25 @@ export default function RegisterPage() {
   } = useUsernameAvailability(isPatternValid ? debouncedUsername : "");
 
   const usernameIsChecked =
-    isPatternValid && debouncedUsername === username && !isCheckingUsername && !usernameCheckErrored;
+    isPatternValid &&
+    debouncedUsername === username &&
+    !isCheckingUsername &&
+    !usernameCheckErrored;
 
   function handleUsernameChange(e: ChangeEvent<HTMLInputElement>) {
-    const sanitized = e.target.value.replace(/@/g, "").toLowerCase();
-    setValue("username", sanitized, { shouldValidate: true, shouldDirty: true });
+    const sanitized = sanitizeUsername(e.target.value);
+    setValue("username", sanitized, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   }
 
   async function onSubmit(values: RegisterFormValues) {
     setSubmitError(null);
-    if (hasInvalidChars || (usernameIsChecked && isUsernameAvailable === false)) {
+    if (
+      hasInvalidChars ||
+      (usernameIsChecked && isUsernameAvailable === false)
+    ) {
       return;
     }
     setIsSubmitting(true);
@@ -67,7 +76,9 @@ export default function RegisterPage() {
       await signUpWithEmail(values.email, values.password, values.username);
       router.push("/dashboard");
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Failed to create account.");
+      setSubmitError(
+        err instanceof Error ? err.message : "Failed to create account.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +87,9 @@ export default function RegisterPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-cream-50 p-8">
       <Card className="w-full max-w-sm">
-        <h1 className="mb-6 text-2xl font-semibold text-charcoal-900">Create your account</h1>
+        <h1 className="mb-6 text-2xl font-semibold text-charcoal-900">
+          Create your account
+        </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
             <Label htmlFor="email">Email</Label>
@@ -86,25 +99,34 @@ export default function RegisterPage() {
               {...register("email", { required: "Email is required" })}
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
           <div>
             <Label htmlFor="username">Instagram Username</Label>
             <p className="mb-1.5 text-xs text-charcoal-600">
-              Your media kit will be available at site.com/yourusername
+              Your media kit will be available at
+              mediakitbuilder.vercel.app/yourusername
             </p>
             <Input
               id="username"
               type="text"
               autoComplete="off"
-              placeholder="@nailsbyhalee"
+              placeholder="@yourusername"
               maxLength={30}
               {...register("username", {
                 required: "Instagram username is required",
-                minLength: { value: 3, message: "Must be at least 3 characters" },
-                maxLength: { value: 30, message: "Must be 30 characters or fewer" },
+                minLength: {
+                  value: 3,
+                  message: "Must be at least 3 characters",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Must be 30 characters or fewer",
+                },
                 pattern: {
                   value: USERNAME_PATTERN,
                   message: "Only letters, numbers, . and _ allowed",
@@ -114,10 +136,13 @@ export default function RegisterPage() {
             />
             {hasInvalidChars ? (
               <p className="mt-1 flex items-center gap-1 text-sm text-red-600">
-                <span aria-hidden>✕</span> Only letters, numbers, . and _ allowed
+                <span aria-hidden>✕</span> Only letters, numbers, . and _
+                allowed
               </p>
             ) : errors.username ? (
-              <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.username.message}
+              </p>
             ) : usernameIsChecked && isUsernameAvailable === true ? (
               <p className="mt-1 flex items-center gap-1 text-sm text-green-600">
                 <span aria-hidden>✓</span> Username available
@@ -131,7 +156,9 @@ export default function RegisterPage() {
                 Couldn&apos;t check availability. Please try again.
               </p>
             ) : isPatternValid ? (
-              <p className="mt-1 text-sm text-charcoal-400">Checking availability…</p>
+              <p className="mt-1 text-sm text-charcoal-400">
+                Checking availability…
+              </p>
             ) : null}
           </div>
 
@@ -144,7 +171,10 @@ export default function RegisterPage() {
                 className="pr-10"
                 {...register("password", {
                   required: "Password is required",
-                  minLength: { value: 6, message: "Password must be at least 6 characters" },
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
                 })}
               />
               <button
@@ -184,13 +214,19 @@ export default function RegisterPage() {
                       strokeLinejoin="round"
                       d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
                     />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                 )}
               </button>
             </div>
             {errors.password && (
-              <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
@@ -210,7 +246,10 @@ export default function RegisterPage() {
         </form>
         <p className="mt-4 text-center text-sm text-charcoal-600">
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-mauve-800 hover:underline">
+          <Link
+            href="/login"
+            className="font-medium text-mauve-800 hover:underline"
+          >
             Log in
           </Link>
         </p>

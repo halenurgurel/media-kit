@@ -9,6 +9,7 @@ import {
   updateDoc,
   where,
   deleteDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import type { MediaKit, UserProfile } from "@/types/mediakit";
@@ -73,4 +74,26 @@ export async function updateMediaKit(
 
 export async function deleteMediaKit(id: string): Promise<void> {
   await deleteDoc(doc(db, MEDIA_KITS_COLLECTION, id));
+}
+
+/** Releases oldUsername, reserves newUsername, and updates both the mediaKit
+ * and user profile docs to point at it — all in one batch so a failure can't
+ * leave the username reserved without the docs updated (or vice versa). The
+ * `usernames/{newUsername}` create still races other signups/changes via the
+ * security rules' `!exists()` check; a collision here throws and nothing
+ * commits. */
+export async function changeUsername(
+  uid: string,
+  oldUsername: string,
+  newUsername: string
+): Promise<void> {
+  const batch = writeBatch(db);
+  batch.delete(doc(db, USERNAMES_COLLECTION, oldUsername));
+  batch.set(doc(db, USERNAMES_COLLECTION, newUsername), { uid });
+  batch.update(doc(db, MEDIA_KITS_COLLECTION, uid), {
+    username: newUsername,
+    updatedAt: serverTimestamp(),
+  });
+  batch.update(doc(db, USERS_COLLECTION, uid), { username: newUsername });
+  await batch.commit();
 }
