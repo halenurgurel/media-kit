@@ -7,8 +7,19 @@ import { useToastStore } from "@/store/useToastStore";
 import { MediaKitPDFDocument } from "@/lib/generateMediaKitPDF";
 import { cn } from "@/lib/utils";
 
+const TURKISH_TRANSLITERATIONS: Record<string, string> = {
+  ç: "c", Ç: "C",
+  ğ: "g", Ğ: "G",
+  ı: "i",
+  İ: "I",
+  ö: "o", Ö: "O",
+  ş: "s", Ş: "S",
+  ü: "u", Ü: "U",
+};
+
 function sanitizeFileName(value: string): string {
-  const cleaned = value.trim().replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "");
+  const transliterated = value.replace(/[çÇğĞıİöÖşŞüÜ]/g, (ch) => TURKISH_TRANSLITERATIONS[ch] ?? ch);
+  const cleaned = transliterated.trim().replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "");
   return cleaned || "media-kit";
 }
 

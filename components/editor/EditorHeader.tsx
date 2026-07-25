@@ -31,8 +31,8 @@ export function EditorHeader() {
   }
 
   return (
-    <header className="flex items-center justify-between border-b border-cream-200 bg-cream-50 px-6 py-4">
-      <div className="flex items-center gap-3">
+    <header className="flex flex-col gap-3 border-b border-cream-200 bg-cream-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="flex flex-wrap items-center gap-3">
         <Link href="/dashboard" className="text-sm font-medium text-charcoal-600 hover:underline">
           ← Dashboard
         </Link>

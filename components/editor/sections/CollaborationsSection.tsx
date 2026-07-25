@@ -22,6 +22,7 @@ function emptyCollaboration(): Collaboration {
     description: "",
     resultMetric: "",
     date: "",
+    postUrl: "",
   };
 }
 
@@ -96,7 +97,7 @@ export function CollaborationsSection() {
                         }
                       />
 
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <div>
                           <Label>Brand name</Label>
                           <Input {...register(`collaborations.${index}.brandName` as const)} />
@@ -105,15 +106,23 @@ export function CollaborationsSection() {
                           <Label>Date</Label>
                           <Input placeholder="e.g. Mar 2026" {...register(`collaborations.${index}.date` as const)} />
                         </div>
-                        <div className="col-span-2">
+                        <div className="sm:col-span-2">
                           <Label>Description</Label>
                           <Input {...register(`collaborations.${index}.description` as const)} />
                         </div>
-                        <div className="col-span-2">
+                        <div className="sm:col-span-2">
                           <Label>Result metric</Label>
                           <Input
                             placeholder="e.g. 52K views, 4.2% engagement"
                             {...register(`collaborations.${index}.resultMetric` as const)}
+                          />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <Label>Post link</Label>
+                          <Input
+                            type="url"
+                            placeholder="https://instagram.com/p/..."
+                            {...register(`collaborations.${index}.postUrl` as const)}
                           />
                         </div>
                       </div>

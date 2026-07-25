@@ -1,4 +1,4 @@
-import { Document, Page, View, Text, Image, StyleSheet, Font } from "@react-pdf/renderer";
+import { Document, Page, View, Text, Image, Link, StyleSheet, Font } from "@react-pdf/renderer";
 import { averageEngagementRate } from "@/lib/mediakit";
 import { parseDemographicSegments } from "@/lib/demographics";
 import type { MediaKit, MediaKitFontFamily, MediaKitLayout } from "@/types/mediakit";
@@ -11,14 +11,18 @@ import type { MediaKit, MediaKitFontFamily, MediaKitLayout } from "@/types/media
 // the DataView" — the .woff variant of the same glyphs subsets cleanly.
 const FONTSOURCE_CDN = "https://cdn.jsdelivr.net/npm/@fontsource";
 
+// The "latin-ext" subset (not "latin") is used: react-pdf registers a single
+// file per family/weight with no per-character fallback, and only "latin-ext"
+// covers Turkish characters (ş, ğ, ı, İ, ö, ü, ç) — verified it still includes
+// plain ASCII too, so nothing is lost for non-Turkish text.
 // Only 400/700 are registered: DM Sans doesn't ship a 600 static weight,
 // and mixing weight sets per family would fight the single shared StyleSheet.
 function registerFont(family: string, slug: string) {
   Font.register({
     family,
     fonts: [
-      { src: `${FONTSOURCE_CDN}/${slug}@4/files/${slug}-latin-400-normal.woff`, fontWeight: 400 },
-      { src: `${FONTSOURCE_CDN}/${slug}@4/files/${slug}-latin-700-normal.woff`, fontWeight: 700 },
+      { src: `${FONTSOURCE_CDN}/${slug}@4/files/${slug}-latin-ext-400-normal.woff`, fontWeight: 400 },
+      { src: `${FONTSOURCE_CDN}/${slug}@4/files/${slug}-latin-ext-700-normal.woff`, fontWeight: 700 },
     ],
   });
 }
@@ -56,10 +60,10 @@ const elegantColors: ThemeColors = {
 const boldColors: ThemeColors = {
   background: "#1C1410",
   text: "#FAF7F4",
-  accent: "#B08BA8",
-  accentLight: "#2C2420",
+  accent: "#D14D6C",
+  accentLight: "#5A3A4A",
   muted: "#D4B8CE",
-  border: "#3A302A",
+  border: "#5A3A4A",
 };
 
 const minimalColors: ThemeColors = {
@@ -263,6 +267,13 @@ export function MediaKitPDFDocument({ mediaKit }: MediaKitPDFDocumentProps) {
       paddingVertical: 2,
       paddingHorizontal: 6,
       borderRadius: 8,
+      marginBottom: 3,
+    },
+    collabLink: {
+      fontSize: 8,
+      fontWeight: 700,
+      color: colors.accent,
+      textDecoration: "none",
     },
     serviceGrid: {
       flexDirection: "row",
@@ -390,6 +401,11 @@ export function MediaKitPDFDocument({ mediaKit }: MediaKitPDFDocumentProps) {
                   ) : null}
                   {collab.resultMetric ? (
                     <Text style={styles.collabBadge}>{collab.resultMetric}</Text>
+                  ) : null}
+                  {collab.postUrl ? (
+                    <Link src={collab.postUrl} style={styles.collabLink}>
+                      View post →
+                    </Link>
                   ) : null}
                 </View>
               </View>

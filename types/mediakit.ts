@@ -41,6 +41,7 @@ export interface Collaboration {
   description: string;
   resultMetric: string;
   date: string;
+  postUrl?: string;
 }
 
 export type ServiceCurrency = "USD" | "EUR" | "TRY";

@@ -30,7 +30,7 @@ export function StatsSection() {
 
   return (
     <div className="flex max-w-md flex-col gap-5">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="avgLikes">Avg. likes</Label>
           <Input id="avgLikes" type="number" min={0} {...register("avgLikes", { valueAsNumber: true })} />

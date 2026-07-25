@@ -45,6 +45,16 @@ export function CollaborationGrid({ collaborations }: CollaborationGridProps) {
                   {collab.resultMetric}
                 </span>
               )}
+              {collab.postUrl && (
+                <a
+                  href={collab.postUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 w-fit text-xs font-medium text-[color:var(--theme-accent)] hover:underline"
+                >
+                  View post →
+                </a>
+              )}
             </div>
           </div>
         ))}

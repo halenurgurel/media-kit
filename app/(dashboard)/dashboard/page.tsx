@@ -4,8 +4,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 
 export default function DashboardPage() {
   return (
-    <main className="mx-auto flex max-w-3xl flex-col gap-6 p-8">
-      <div className="flex items-center justify-between">
+    <main className="mx-auto flex max-w-3xl flex-col gap-6 p-4 sm:p-8">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <Link href="/editor">
           <Button>Edit my media kit</Button>

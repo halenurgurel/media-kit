@@ -57,8 +57,8 @@ export function ServicesSection() {
                 Remove
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="col-span-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="sm:col-span-2">
                 <Label>Name</Label>
                 <Input
                   placeholder="e.g. Instagram Reel"

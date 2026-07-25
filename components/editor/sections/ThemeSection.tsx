@@ -4,7 +4,7 @@ import { useEditorStore } from "@/store/useEditorStore";
 import { Label } from "@/components/ui/Label";
 import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
-import { fontFamilyLabels, layoutLabels } from "@/lib/theme";
+import { fontFamilyLabels, layoutDefaultColors, layoutLabels } from "@/lib/theme";
 import type { MediaKitFontFamily, MediaKitLayout } from "@/types/mediakit";
 
 const FONT_FAMILIES: MediaKitFontFamily[] = ["inter", "playfair", "poppins", "dm-sans"];
@@ -20,9 +20,16 @@ export function ThemeSection() {
   const draft = useEditorStore((state) => state.draft);
   const updateField = useEditorStore((state) => state.updateField);
 
+  function selectLayout(layout: MediaKitLayout) {
+    updateField("theme.layout", layout);
+    const preset = layoutDefaultColors[layout];
+    updateField("theme.primaryColor", preset.primaryColor);
+    updateField("theme.backgroundColor", preset.backgroundColor);
+  }
+
   return (
     <div className="flex max-w-md flex-col gap-6">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="primaryColor">Primary color</Label>
           <input
@@ -67,7 +74,7 @@ export function ThemeSection() {
             <button
               key={layout}
               type="button"
-              onClick={() => updateField("theme.layout", layout)}
+              onClick={() => selectLayout(layout)}
               className={cn(
                 "flex flex-col items-center gap-2 rounded-md border p-2 transition-colors",
                 draft.theme.layout === layout

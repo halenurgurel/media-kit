@@ -70,7 +70,7 @@ export default function EditorPage() {
   const ActiveSectionComponent = sectionComponents[activeSection];
 
   return (
-    <div className="flex min-h-screen flex-col bg-cream-50">
+    <div className="flex min-h-screen flex-col bg-cream-50 md:h-screen md:overflow-hidden">
       <EditorHeader />
 
       {mediaKitLoading ? (
@@ -78,13 +78,13 @@ export default function EditorPage() {
           Loading your media kit...
         </div>
       ) : (
-        <main className="flex flex-1 overflow-hidden">
-          <section className="flex w-[40%] flex-col gap-6 overflow-y-auto border-r border-cream-200 p-6">
+        <main className="flex flex-1 flex-col overflow-y-auto md:flex-row md:overflow-hidden">
+          <section className="flex w-full flex-col gap-6 overflow-y-auto border-b border-cream-200 p-4 sm:p-6 md:w-[40%] md:border-b-0 md:border-r">
             <EditorSidebar />
             <ActiveSectionComponent />
           </section>
 
-          <section className="w-[60%] overflow-y-auto">
+          <section className="w-full md:w-[60%] md:overflow-y-auto">
             <MediaKitPreview draft={draft} />
           </section>
         </main>
