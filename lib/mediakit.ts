@@ -22,7 +22,6 @@ export function createEmptyMediaKit(userId = "", username = ""): MediaKit {
     stats: {
       avgLikes: 0,
       avgComments: 0,
-      avgReach: 0,
       monthlyImpressions: 0,
       audienceLocation: "",
       audienceAge: "",

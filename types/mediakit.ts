@@ -16,7 +16,6 @@ export interface Platform {
 export interface CreatorStats {
   avgLikes: number;
   avgComments: number;
-  avgReach: number;
   monthlyImpressions: number;
   audienceLocation: string;
   audienceAge: string;

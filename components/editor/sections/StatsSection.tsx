@@ -45,10 +45,6 @@ export function StatsSection() {
           />
         </div>
         <div>
-          <Label htmlFor="avgReach">Avg. reach</Label>
-          <Input id="avgReach" type="number" min={0} {...register("avgReach", { valueAsNumber: true })} />
-        </div>
-        <div>
           <Label htmlFor="monthlyImpressions">Monthly impressions</Label>
           <Input
             id="monthlyImpressions"
